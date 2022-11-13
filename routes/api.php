@@ -30,7 +30,9 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 Route::middleware(['auth:sanctum'])->group(function () {
     Route::get('tilte', [UserController::class, 'show']);
-    Route::get('documents',[DocumentController::class, 'index']);
+
+    Route::get('documents', [DocumentController::class, 'index']);
+    Route::post('document', [DocumentController::class, 'store']);
 });
 
 //AUTHENTICATION
@@ -57,7 +59,6 @@ Route::post('/register', [UserController::class, 'store']);
 
 // Route::get('document/{id}', [DocumentController::class, 'show']);
 
-// Route::post('document', [DocumentController::class, 'store']);
 
 // Route::post('user/document', function () {
 //     return 'fdfdfd';
