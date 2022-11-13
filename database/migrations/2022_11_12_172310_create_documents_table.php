@@ -18,6 +18,7 @@ return new class extends Migration
             $table->string('name');
             $table->foreignId('user_id');
             $table->string('part');
+            $table->string('part_of_file');
             $table->json('details')->nullable();
             $table->string('path')->nullable();
             $table->timestamps();

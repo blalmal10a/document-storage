@@ -1,12 +1,13 @@
 <?php
 
 use App\Http\Controllers\DocumentController;
+use App\Http\Controllers\UserController;
 use App\Models\document;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
-
+use PhpParser\Node\Stmt\TryCatch;
 
 /*
 |--------------------------------------------------------------------------
@@ -19,10 +20,19 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+//AUTHENTICATED
+
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     // return $request;
     return $request->user();
 });
+
+
+Route::middleware(['auth:sanctum'])->group(function () {
+    Route::get('tilte', [UserController::class, 'show']);
+    Route::get('documents',[DocumentController::class, 'index']);
+});
+
 //AUTHENTICATION
 
 Route::post('/tokens/create', function (Request $request) {
@@ -32,26 +42,22 @@ Route::post('/tokens/create', function (Request $request) {
     return ['token' => $token->plainTextToken];
 });
 
+//USER REGISTER
+
+Route::post('/register', [UserController::class, 'store']);
+
+///
 //GET DATA
 // Route::get('user', function (Request $request) {
 //     // return User::find(1);
 //     return User::with('documents')->first();
 // });
 
-Route::get('documents', function (Request $request) {
-    return $request->user();
-    // document::create([
-    //     'name' => 'example name',
-    //     'user_id' => 1,
-    //     'part' => 'front',
 
-    // ]);
-    return document::get();
-});
 
-Route::get('document/{id}', [DocumentController::class, 'show']);
+// Route::get('document/{id}', [DocumentController::class, 'show']);
 
-Route::post('document', [DocumentController::class, 'store']);
+// Route::post('document', [DocumentController::class, 'store']);
 
 // Route::post('user/document', function () {
 //     return 'fdfdfd';

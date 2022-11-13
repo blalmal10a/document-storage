@@ -13,9 +13,12 @@ class DocumentController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        //
+        //get all user doocuments
+logger('asdfasdf');
+        $user = $request->user();
+        return document::where('user_id', $user->id )->get();
     }
 
     /**
@@ -37,12 +40,18 @@ class DocumentController extends Controller
      */
     public function store(Request $request)
     {
-        $user_id = 2;
+        $user_id = $request->user_id;
+        $part = $request->part;
+        $request['part_of_file'] = $request->name . $request->part;
+
+        // return $request;
+       if($request->user_id == null) $user_id = 3;
         try {
             $validated = $request->validate([
-                // 'name' => 'required',
-                'name' => 'required|unique:documents,name,NULL,name,user_id,' . $user_id,
+                'name' => 'required',
                 'part' => 'required',
+                'part_of_file' => 'required|unique:documents,part_of_file, NULL,part_of_file,user_id,' . $user_id,
+
             ]);
             logger($validated);
 
