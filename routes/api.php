@@ -33,6 +33,9 @@ Route::middleware(['auth:sanctum'])->group(function () {
 
     Route::get('documents', [DocumentController::class, 'index']);
     Route::post('document', [DocumentController::class, 'store']);
+    Route::post('document/{document}', [DocumentController::class, 'update']);
+    Route::delete('document/{document}', [DocumentController::class, 'destroy']);
+    // Route::patch('document/{document}', [DocumentController::class, 'destroy']);
 });
 
 //AUTHENTICATION

@@ -40,25 +40,23 @@ class DocumentController extends Controller
      */
     public function store(Request $request)
     {
-        $user_id = $request->user()->id;
-        // $user_id = $request->user_id;
-        // if ($request->user_id == null) $user_id = 3;
-        $part = $request->part;
-        $request['part_of_file'] = $request->name . $request->part;
-
         try {
+            $user_id = $request->user()->id;
+
+            $part = $request->part;
+            $request['part_of_file'] = $request->name . $request->part;
+
             $validated = $request->validate([
                 'name' => 'required',
                 'part' => 'required',
                 'path' => 'nullable',
+                'document_file' => 'required|file',
                 'part_of_file' => 'required|unique:documents,part_of_file, NULL,part_of_file,user_id,' . $user_id,
             ]);
-            logger($validated);
-
             $result = $request;
             $result['details'] = json_decode($request->details, true);
 
-            $docname = str_replace(' ', '_', $request->name);
+            $docname = str_replace(' ', '_', $request->part_of_file);
             $filename = $docname . '.' . $request->document_file->getClientOriginalExtension();
             $file_path = Storage::putFileAs('public/1', $request->document_file, $filename);
             $result['path'] = $file_path;
@@ -79,6 +77,8 @@ class DocumentController extends Controller
      */
     public function show(document $document, Request $request)
     {
+
+
 
         return $request;
         //
@@ -104,6 +104,36 @@ class DocumentController extends Controller
      */
     public function update(Request $request, document $document)
     {
+        // return $request;z
+        $docname = null;
+        try {
+            $user_id = $request->user()->id;
+            $request['part_of_file'] = $request->name . $request->part;
+            if ($request->file != null) {
+                $filename = $docname . '.' . $request->document_file->getClientOriginalExtension();
+                $file_path = Storage::putFileAs('public/1', $request->document_file, $filename);
+                $request['path'] = $file_path;
+            }
+
+            $validated = $request->validate([
+                'name' => 'required',
+                'part' => 'required',
+                'path' => 'nullable',
+                'document_file' => 'required|file',
+                'part_of_file' => 'required|unique:documents,part_of_file, NULL,part_of_file,user_id,' . $user_id,
+            ]);
+
+            $result = $request->toArray();
+            $result['details'] = json_decode($request->details, true);
+
+            $docname = str_replace(' ', '_', $request->name);
+            unset($result["document_file"]);
+
+            $result = document::where('id', $document->id)
+                ->update($result);
+        } catch (\Throwable $th) {
+            return $th;
+        }
         //
     }
 
@@ -113,8 +143,17 @@ class DocumentController extends Controller
      * @param  \App\Models\document  $document
      * @return \Illuminate\Http\Response
      */
-    public function destroy(document $document)
+    public function destroy(document $document, Request $request)
     {
+
+        $document->delete();
+        return $this->index(request());
+
+        // $collector->delete();
+        // return $this->index(request());
+        // $document->delete();
+        // index(request());
+        // logger($document);
         //
     }
 }
