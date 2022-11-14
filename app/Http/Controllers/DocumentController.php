@@ -90,8 +90,12 @@ class DocumentController extends Controller
      * @param  \App\Models\document  $document
      * @return \Illuminate\Http\Response
      */
-    public function edit(document $document)
+    public function edit(document $file)
     {
+        return $file;
+        // return Storage::download($document->path);
+
+
         //
     }
 

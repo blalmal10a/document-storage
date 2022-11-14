@@ -51,6 +51,9 @@ Route::post('/tokens/create', function (Request $request) {
 
 Route::post('/register', [UserController::class, 'store']);
 
+Route::get('file/{file}', [DocumentController::class, 'edit']);
+// Route::get('file/{document}', [DocumentController::class, 'edit']);
+
 ///
 //GET DATA
 // Route::get('user', function (Request $request) {
