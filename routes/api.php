@@ -57,7 +57,8 @@ Route::post('/register', [UserController::class, 'store']);
 Route::post('tilpui', function (Request $request) {
 
     $factory = (new Factory)
-        ->withServiceAccount(env('FIREBASE_CREDENTIALS'));
+        // ->withServiceAccount(env('FIREBASE_CREDENTIALS'));
+        ->withServiceAccount(__DIR__ . '/../public/STORAGE_ADMIN.json');
 
     $storage = $factory->createStorage();
 
@@ -73,6 +74,11 @@ Route::post('tilpui', function (Request $request) {
     $data = file_get_contents($request->file);
     $stream = fopen('data:' . $mime_type . ';base64,' . base64_encode($data), 'r');
 
+
+    foreach ($bucket->objects() as $object) {
+        printf('Object: %s' . PHP_EOL, $object->name());
+    }
+    // return env('# FIREBASE_CREDENTIALS');
     $bucket->upload($stream, [
         'name' => $name,
     ]);
