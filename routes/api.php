@@ -1,8 +1,10 @@
 <?php
 
 use App\Http\Controllers\DocumentController;
+use App\Http\Controllers\TilteStorageController;
 use App\Http\Controllers\UserController;
 use App\Models\document;
+use App\Models\TilteStorage;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -54,7 +56,11 @@ Route::post('/tokens/create', function (Request $request) {
 
 Route::post('/register', [UserController::class, 'store']);
 
+Route::get('tilte-storage', [TilteStorageController::class, 'show']);
+
 Route::post('tilpui', function (Request $request) {
+
+    return TilteStorage::storage();
 
     $factory = (new Factory)
         // ->withServiceAccount(env('FIREBASE_CREDENTIALS'));
