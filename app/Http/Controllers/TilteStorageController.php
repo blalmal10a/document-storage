@@ -19,12 +19,9 @@ class TilteStorageController extends Controller
             $bucket = $storage->bucket('etilte.appspot.com');
             $contents = 'this si the newshit';
             $stream = fopen('data://text/plain,' . $contents, 'r');
-
-
             $object = $bucket->object('tilte.txt');
             return $object->delete();
             $contents = $object->downloadAsString();
-
             logger($contents);
             return ($contents);
         } catch (\Throwable $th) {
