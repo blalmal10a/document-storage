@@ -12,8 +12,9 @@ use Illuminate\Support\Facades\Route;
 use PhpParser\Node\Stmt\TryCatch;
 
 use Google\Cloud\Storage\StorageClient;
-
+use Illuminate\Support\Facades\Hash;
 use Kreait\Firebase\Factory;
+// use Auth;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -45,10 +46,29 @@ Route::middleware(['auth:sanctum'])->group(function () {
 
 //AUTHENTICATION
 
-Route::post('/tokens/create', function (Request $request) {
-    $user = User::where('id', $request->id)->first();
-    $token = $user->createToken('tilte');
-    return ['token' => $token->plainTextToken];
+Route::post('login', function (Request $request) {
+    try {
+        $request->validate([
+            'name' => 'exists:users,name',
+            'password' => 'required|min:6'
+        ], ['exists:users,name' => 'What the fuck']);
+        $user = User::where('name', $request->name)->first();
+        $pw = bcrypt($request->password);
+        logger($pw);
+        logger($user->password);
+        if (Hash::check($request->password, $user->password)) {
+
+            $token = $user->createToken('tilte');
+            return ['token' => $token->plainTextToken];
+        } else {
+            return response()->json([
+                'status' => false,
+                'message' => 'Incorrect password.',
+            ], 403);
+        }
+    } catch (\Throwable $th) {
+        return $th;
+    }
 });
 
 //USER REGISTER
