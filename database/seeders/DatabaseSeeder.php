@@ -5,6 +5,7 @@ namespace Database\Seeders;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 
 use App\Models\document;
+use App\Models\User;
 use Illuminate\Database\Seeder;
 use PhpParser\JsonDecoder;
 
@@ -22,9 +23,15 @@ class DatabaseSeeder extends Seeder
     {
         // \App\Models\User::factory(10)->create(['password' => bcrypt('password')]);
 
-        \App\Models\User::factory()->create([
-            'name' => 'tilte first',
-            'email' => 'first@user',
+        // \App\Models\User::factory()->create([
+        //     'name' => 'tilte first',
+        //     'phone' => '9774888724',
+        // ]);
+
+        User::insert([
+            'name' => 'tilte',
+            'phone' => '9774888724',
+            'password' => bcrypt('password')
         ]);
     }
 }

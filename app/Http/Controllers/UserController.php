@@ -8,10 +8,8 @@ use Illuminate\Http\Request;
 
 class UserController extends Controller
 {
-    //
     public function show(Request $request)
     {
-
         return $request->user();
     }
 
@@ -20,7 +18,7 @@ class UserController extends Controller
         try {
 
             $validated = $request->validate([
-                'name' => 'required',
+                'name' => 'required|unique:users',
                 'email' => 'required|unique:users',
                 'password' => 'required|min:6|confirmed',
             ]);

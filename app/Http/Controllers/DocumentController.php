@@ -6,7 +6,7 @@ use App\Models\document;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Google\Cloud\Storage\StorageClient;
-use PhpParser\Node\Stmt\TryCatch;
+
 
 class DocumentController extends Controller
 {
@@ -34,7 +34,6 @@ class DocumentController extends Controller
 
     public function index(Request $request)
     {
-
         $user = $request->user();
         return document::where('user_id', $user->id)->get();
     }
@@ -75,9 +74,6 @@ class DocumentController extends Controller
             $result['details'] = json_decode($request->details, true);
             $docname = str_replace(' ', '_', $request->part_of_file);
             $filename = $user_id . '/' . $docname  . '.' . $request->document_file->getClientOriginalExtension();
-            ///
-            // $file_path = Storage::putFileAs('public/1', $request->document_file, $filename);
-            // $bucket->
 
             $bucket = $this->storageBucket();
             $mime_type = $request->document_file->getMimeType();
@@ -104,9 +100,6 @@ class DocumentController extends Controller
      */
     public function show(document $document, Request $request)
     {
-
-
-
         return $request;
     }
 
@@ -134,52 +127,41 @@ class DocumentController extends Controller
      */
     public function update(Request $request, document $document)
     {
-
         try {
             $user_id = $request->user()->id;
             $request['part_of_file'] = $request->name . $request->part;
-
-            // if ($request->file != null) {
-            // $filename = $docname . '.' . $request->document_file->getClientOriginalExtension();
-            // $file_path = Storage::putFileAs('public/1', $request->document_file, $filename);
-            // $request['path'] = $file_path;
-            // }
 
             $validated = $request->validate([
                 'name' => 'required',
                 'part' => 'required',
                 'path' => 'nullable',
-                'document_file' => 'required|file',
                 'part_of_file' => 'required|unique:documents,part_of_file, NULL,part_of_file,user_id,' . $user_id,
             ]);
 
             $result = $request->toArray();
             $result['details'] = json_decode($request->details, true);
             $docname = str_replace(' ', '_', $request->part_of_file);
+
             $filename = $request->path;
+
             if ($request->document_file)
                 $filename = $docname . '_' . $user_id . '.' . $request->document_file->getClientOriginalExtension();
-            // $filename = $docname . $user_id . '.' .  $request->document_file->getClientOriginalExtension();
 
             $docname = str_replace(' ', '_', $request->part_of_file);
 
             $bucket = $this->storageBucket();
 
             $object = $bucket->object($request->path);
-            // $asdf = (array)$object;
 
-            // $filename = 'asdf.pdf';
             $object->copy('etilte.appspot.com', ['name' => $filename]);
             $result['path'] = $filename;
             $object->delete();
 
             unset($result["document_file"]);
-
-
             $result = document::where('id', $document->id)
                 ->update($result);
+            return $this->index(request());
         } catch (\Throwable $th) {
-            logger($th);
             return $th;
         }
         //
@@ -204,11 +186,5 @@ class DocumentController extends Controller
         } catch (\Throwable $th) {
             return $th;
         }
-        // $collector->delete();
-        // return $this->index(request());
-        // $document->delete();
-        // index(request());
-        // logger($document);
-        //
     }
 }

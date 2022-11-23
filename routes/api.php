@@ -42,6 +42,10 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::post('document', [DocumentController::class, 'store']);
     Route::post('document/{document}', [DocumentController::class, 'update']);
     Route::delete('document/{document}', [DocumentController::class, 'destroy']);
+
+    Route::post('logout', function (Request $request) {
+        $request->user()->currentAccessToken()->delete();
+    });
 });
 
 //AUTHENTICATION
@@ -74,7 +78,19 @@ Route::post('login', function (Request $request) {
 //USER REGISTER
 
 Route::post('/register', [UserController::class, 'store']);
+Route::post('check-unique', function (Request $request) {
 
+    try {
+        $validated = $request->validate([
+            'name' => 'required|unique:users',
+            'phone' => 'required|unique:users',
+            'password' => 'required|confirmed',
+        ]);
+        return $request;
+    } catch (\Throwable $th) {
+        return response($th->getMessage(), 403);
+    }
+});
 // Route::get('tilte-storage', [TilteStorageController::class, 'show']);
 
 // Route::post('tilpui', function (Request $request) {
