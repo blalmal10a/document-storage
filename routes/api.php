@@ -9,9 +9,11 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
-use PhpParser\Node\Stmt\TryCatch;
+
 
 use Google\Cloud\Storage\StorageClient;
+
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Kreait\Firebase\Factory;
 // use Auth;
@@ -38,7 +40,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::get('tilte', [UserController::class, 'show']);
 
     Route::get('documents', [DocumentController::class, 'index']);
-    Route::get('document/{document}', [DocumentController::class, 'update']);
+    Route::get('document/{document}', [DocumentController::class, 'show']);
     Route::post('document', [DocumentController::class, 'store']);
     Route::post('document/{document}', [DocumentController::class, 'update']);
     Route::delete('document/{document}', [DocumentController::class, 'destroy']);
@@ -55,23 +57,38 @@ Route::post('login', function (Request $request) {
         $request->validate([
             'name' => 'exists:users,name',
             'password' => 'required|min:6'
-        ], ['exists:users,name' => 'What the fuck']);
+        ]);
         $user = User::where('name', $request->name)->first();
         $pw = bcrypt($request->password);
         logger($pw);
         logger($user->password);
+        $credentials = $request->only('phone', 'password');
+
         if (Hash::check($request->password, $user->password)) {
 
             $token = $user->createToken('tilte');
             return ['token' => $token->plainTextToken];
         } else {
-            return response()->json([
-                'status' => false,
-                'message' => 'Incorrect password.',
-            ], 403);
+            return response('Incorrect password', 401);
+
+            // return response()->json([
+            //     'status' => false,
+            //     'message' => 'Incorrect password.',
+            // ], 403);
         }
+
+        // if (Auth::attempt($credentials)) {
+        //     return 'authenticated';
+        // } else {
+        //     return response('Incorrect password', 401);
+        //     // return response()->json(['message' => 'Incorrect password'], 401);
+        // }
+
+        // if (!$token = JWTAuth::attempt($credentials)) {
+        //     return response()->json(['error' => 'invalid_credentials'], 401);
+        // }
     } catch (\Throwable $th) {
-        return $th;
+        return response($th->getMessage(), 422);
     }
 });
 
@@ -89,6 +106,17 @@ Route::post('check-unique', function (Request $request) {
         return $request;
     } catch (\Throwable $th) {
         return response($th->getMessage(), 403);
+    }
+});
+Route::post('save-user', function (Request $request) {
+    try {
+        User::create([
+            'name' => $request->name,
+            'phone' => $request->phone,
+            'password' => bcrypt($request->password)
+        ]);
+    } catch (\Throwable $th) {
+        return Response($th->getMessage(), 422);
     }
 });
 // Route::get('tilte-storage', [TilteStorageController::class, 'show']);

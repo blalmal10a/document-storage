@@ -100,7 +100,23 @@ class DocumentController extends Controller
      */
     public function show(document $document, Request $request)
     {
-        return $request;
+        $filename = $document->path;
+        $bucket = $this->storageBucket();
+        $object = $bucket->object($filename);
+        $info =  $object->info();
+
+        $contents = $object->downloadAsString();
+
+
+        $stream = 'data:' . $info['contentType'] . ';base64,' . base64_encode($contents);
+        // printf(
+        //     'Downloaded %s from gs://%s/%s' . PHP_EOL,
+        //     $contents,
+        //     'tilte bucket',
+        //     $filename
+        // );
+        // printf('%s', $contents);
+        return $stream;
     }
 
     /**
