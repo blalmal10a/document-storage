@@ -15,7 +15,6 @@ use Google\Cloud\Storage\StorageClient;
 
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
-use Kreait\Firebase\Factory;
 // use Auth;
 /*
 |--------------------------------------------------------------------------
