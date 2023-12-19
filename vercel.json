@@ -12,6 +12,28 @@
             "dest": "/public/assets/"
         },
         {
+            "src": "/icons/(.*)",
+            "dest": "/public/icons/"
+        },
+        {
+            "src": "/src/(.*)",
+            "dest": "/public/src/"
+        },
+
+        {
+            "src": "/STORAGE_ADMIN.json",
+            "dest": "/public/STORAGE_ADMIN.json"
+        },
+        {
+            "src": "/sw.js",
+            "dest": "/public/sw.js"
+        },
+        {
+            "src": "/workbox-17c5f633.js",
+            "dest": "/public/workbox-17c5f633.js"
+        },
+
+        {
             "src": "/(.*)",
             "dest": "/api/index.php"
         }
