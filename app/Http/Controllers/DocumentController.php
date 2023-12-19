@@ -57,6 +57,7 @@ class DocumentController extends Controller
      */
     public function store(Request $request)
     {
+
         try {
             $user_id = $request->user()->id;
             $part = $request->part;
@@ -69,6 +70,7 @@ class DocumentController extends Controller
                 'document_file' => 'required|file',
                 'part_of_file' => 'required|unique:documents,part_of_file, NULL,part_of_file,user_id,' . $user_id,
             ]);
+
 
             $result = $request;
             $result['details'] = json_decode($request->details, true);
@@ -88,7 +90,7 @@ class DocumentController extends Controller
             $result = document::create($result->toArray());
             return $this->index(request());
         } catch (\Throwable $th) {
-            return $th;
+            return response($th->getMessage(), 422);
         }
     }
 
@@ -178,7 +180,8 @@ class DocumentController extends Controller
                 ->update($result);
             return $this->index(request());
         } catch (\Throwable $th) {
-            return $th;
+            logger($th);
+            return response($th->getMessage(), 422);
         }
         //
     }

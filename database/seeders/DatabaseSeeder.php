@@ -29,9 +29,9 @@ class DatabaseSeeder extends Seeder
         // ]);
 
         User::insert([
-            'name' => 'tilte',
+            'name' => 'ys-grouse',
             'phone' => '9774888724',
-            'password' => bcrypt('password')
+            'password' => bcrypt('Kurkur3;')
         ]);
     }
 }
