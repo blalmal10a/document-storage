@@ -27,7 +27,13 @@ use Illuminate\Support\Facades\Hash;
 |
 */
 
+
+Route::get('test', function () {
+    return 'api test';
+});
+
 //AUTHENTICATED
+
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     // return $request;

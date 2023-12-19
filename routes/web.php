@@ -18,6 +18,10 @@ Route::get('/', function () {
     return view('app');
 });
 
+Route::get('/test', function () {
+    return 'test';
+});
+
 // Route::get('/{any}', function () {
 //     return view('app');
 // })->where("any", ".*");
