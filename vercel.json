@@ -3,7 +3,7 @@
     "framework": null,
     "functions": {
         "api/index.php": {
-            "runtime": "vercel-php@0.5.3"
+            "runtime": "vercel-php@0.3.1"
         }
     },
     "routes": [
@@ -30,6 +30,6 @@
         "LOG_CHANNEL": "stderr",
         "SESSION_DRIVER": "cookie",
         "DB_CONNECTION": "pgsql",
-        "DATABASE_": "postgresql://postgres:Gzrk_4KNLvKdpx2@db.vdlmulgixnckeyjboiin.supabase.co:5432/postgres"
+        "DATABASE_URL": "postgresql://postgres:Gzrk_4KNLvKdpx2@db.vdlmulgixnckeyjboiin.supabase.co:5432/postgres"
     }
 }
