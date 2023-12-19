@@ -6,7 +6,6 @@
             "runtime": "vercel-php@0.6.0"
         }
     },
-    "routes": [],
     "rewrites": [{ "source": "/(.*)", "destination": "/" }],
     "env": {
         "APP_ENV": "production",
