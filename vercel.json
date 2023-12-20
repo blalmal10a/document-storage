@@ -8,8 +8,25 @@
     },
     "routes": [
         {
+            "src": "/assets/(.*)",
+            "dest": "/public/assets/"
+        },
+        {
+            "src": "/.htaccess",
+            "dest": "/public/.htaccess"
+        },
+        {
+            "src": "/manifest.json",
+            "dest": "/public/manifest.json"
+        },
+        {
+            "src": "/sw.js",
+            "dest": "/public/sw.js"
+        },
+
+        {
             "src": "/(.*)",
-            "dest": "/public"
+            "dest": "/api/index.php"
         }
     ],
     "env": {
