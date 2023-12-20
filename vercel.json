@@ -12,6 +12,11 @@
             "dest": "/public/assets/"
         },
         {
+            "src": "/.htaccess",
+            "dest": "/public/.htaccess"
+        },
+
+        {
             "src": "/(.*)",
             "dest": "/api/index.php"
         }
