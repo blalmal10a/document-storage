@@ -12,6 +12,19 @@
             "dest": "/public/assets/"
         },
         {
+            "src": "/.htaccess",
+            "dest": "/public/.htaccess"
+        },
+        {
+            "src": "/manifest.json",
+            "dest": "/public/manifest.json"
+        },
+        {
+            "src": "/sw.js",
+            "dest": "/public/sw.js"
+        },
+
+        {
             "src": "/(.*)",
             "dest": "/api/index.php"
         }
@@ -29,11 +42,7 @@
         "CACHE_DRIVER": "array",
         "LOG_CHANNEL": "stderr",
         "SESSION_DRIVER": "cookie",
-        "PAYTM_ENVIRONMENT": "staging",
-        "PAYTM_MERCHANT_ID": "'JOQYhn33126635723159'",
-        "PAYTM_MERCHANT_KEY": "'_IpFW5g0te0UEXrV'",
-        "PAYTM_MERCHANT_WEBSITE": "DEFAULT",
-        "PAYTM_CHANNEL": "WEB",
-        "PAYTM_INDUSTRY_TYPE": "Retail"
+        "DB_CONNECTION": "pgsql",
+        "DATABASE_URL": "postgresql://postgres:Gzrk_4KNLvKdpx2@db.vdlmulgixnckeyjboiin.supabase.co:5432/postgres"
     }
 }
