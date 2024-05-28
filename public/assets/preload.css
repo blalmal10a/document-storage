@@ -20,6 +20,10 @@
 }
 
 #loader-wrapper {
+  /* min-height: min(100svh, 700px);
+  min-width: min(100svh, 400px); */
+  height: 100%;
+  width: 100%;
   position: fixed;
   top: 0;
   left: 0;
