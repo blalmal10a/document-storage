@@ -20,7 +20,7 @@ class DocumentController extends Controller
     public function cloudStorage()
     {
         return new StorageClient([
-            'keyFilePath' => __DIR__ . '/../../../public/STORAGE_ADMIN.json',
+            'keyFilePath' => app_path('STORAGE_ADMIN.json'),
             'projectId' => 'etilte'
         ]);
     }
@@ -153,8 +153,14 @@ class DocumentController extends Controller
                 'name' => 'required',
                 'part' => 'required',
                 'path' => 'nullable',
-                'part_of_file' => 'required|unique:documents,part_of_file, NULL,part_of_file,user_id,' . $user_id,
+                // 'part_of_file' => 'required|unique:documents,part_of_file, NULL,part_of_file,user_id,' . $user_id . ',id,' . $document->id,
             ]);
+            $doc = document::where('part_of_file', $request['part_of_file']);
+            $doc->where('user_id', $user_id);
+            $duplicate = $doc->whereNot('id', $document->id)->count();
+            if ($duplicate) {
+                return response('The part of file has already exist', 422);
+            }
 
             $result = $request->toArray();
             $result['details'] = json_decode($request->details, true);

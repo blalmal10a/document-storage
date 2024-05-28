@@ -13,7 +13,7 @@ class TilteStorageController extends Controller
     {
         try {
             $storage = new StorageClient([
-                'keyFilePath' => __DIR__ . '/../../../public/STORAGE_ADMIN.json',
+                'keyFilePath' => app_path('STORAGE_ADMIN.json'),
                 'projectId' => 'etilte'
             ]);
             $bucket = $storage->bucket('etilte.appspot.com');
