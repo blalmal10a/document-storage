@@ -128,12 +128,12 @@
     "/manifest.json": "/manifest.json",
     "/mix-manifest.json": "/mix-manifest.json",
     "/robots.txt": "/robots.txt",
+    "/src/assets/icon-512x512.png": "/src/assets/icon-512x512.png",
     "/src/assets/quasar-logo-vertical.svg": "/src/assets/quasar-logo-vertical.svg",
     "/src/assets/tilte-app-icon-orange-bg.jpeg": "/src/assets/tilte-app-icon-orange-bg.jpeg",
     "/sw.js": "/sw.js",
     "/tilte-app-icon-orange-bg.jpeg": "/tilte-app-icon-orange-bg.jpeg",
     "/tilte-app-icon-orange-bg.png": "/tilte-app-icon-orange-bg.png",
     "/workbox-17c5f633.js": "/workbox-17c5f633.js",
-    "/workbox-c1cfc6fb.js": "/workbox-c1cfc6fb.js",
-    "/src/assets/icon-512x512.png": "/src/assets/icon-512x512.png"
+    "/workbox-c1cfc6fb.js": "/workbox-c1cfc6fb.js"
 }
