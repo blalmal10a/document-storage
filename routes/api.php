@@ -44,7 +44,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::get('document/{document}', [DocumentController::class, 'show']);
     Route::post('document', [DocumentController::class, 'store']);
     Route::post('document/{document}', [DocumentController::class, 'update']);
-    Route::delete('document/{document}', [DocumentController::class, 'destroy']);
+    Route::delete('documents/{document}', [DocumentController::class, 'destroy']);
 
     Route::post('logout', function (Request $request) {
         $request->user()->currentAccessToken()->delete();

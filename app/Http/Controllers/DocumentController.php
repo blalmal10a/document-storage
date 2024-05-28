@@ -173,20 +173,22 @@ class DocumentController extends Controller
 
             $filename = $request->path;
 
-            if ($request->document_file)
+            if ($request->document_file) {
                 $filename = $docname . '_' . $user_id . '.' . $request->document_file->getClientOriginalExtension();
 
-            $docname = str_replace(' ', '_', $request->part_of_file);
+                $docname = str_replace(' ', '_', $request->part_of_file);
 
-            $bucket = $this->storageBucket();
+                $bucket = $this->storageBucket();
 
-            $object = $bucket->object($request->path);
+                $object = $bucket->object($request->path);
 
-            $object->copy('etilte.appspot.com', ['name' => $filename]);
-            $result['path'] = $filename;
-            $object->delete();
+                $object->copy('etilte.appspot.com', ['name' => $filename]);
+                $result['path'] = $filename;
+                $object->delete();
+                unset($result["document_file"]);
+            }
 
-            unset($result["document_file"]);
+
             $result = document::where('id', $document->id)
                 ->update($result);
             return $this->index(request());
@@ -207,10 +209,14 @@ class DocumentController extends Controller
     {
         try {
 
-            $bucket = $this->storageBucket();
+            try {
+                $bucket = $this->storageBucket();
 
-            $object = $bucket->object($document->path);
-            $object->delete();
+                $object = $bucket->object($document->path);
+                $object->delete();
+            } catch (\Throwable $th) {
+                //throw $th;
+            }
             $document->delete();
             return $this->index(request());
         } catch (\Throwable $th) {
