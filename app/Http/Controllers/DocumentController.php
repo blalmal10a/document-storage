@@ -20,7 +20,7 @@ class DocumentController extends Controller
     public function cloudStorage()
     {
         return new StorageClient([
-            'keyFilePath' => app_path('STORAGE_ADMIN.json'),
+            'keyFilePath' => base_path('STORAGE_ADMIN.json'),
             'projectId' => 'etilte'
         ]);
     }
