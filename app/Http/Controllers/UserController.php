@@ -29,6 +29,53 @@ class UserController extends Controller
         $validated['password'] = bcrypt($request->password);
         return User::create($validated);
     }
+
+    public function getUserByPhone(Request $request)
+    {
+        $validated = $request->validate([
+            'phone' => 'required|size:10',
+        ]);
+        $user = User::where('phone', request('phone'))->first();
+
+        if (!$user) {
+            return response([
+                'message' => 'User does not exist',
+            ], 404);
+        }
+
+        $validated = $request->validate([
+            'password' => 'required|confirmed',
+        ]);
+        return $user;
+    }
+
+    public function resetPassword(Request $request)
+    {
+        try {
+            $phone = request('phone');
+            $id = request('id');
+            if (!$phone && !$id) {
+                return response([
+                    'message' => 'Phone or id is required',
+                ], 422);
+            }
+            $user = User::where('id', $id)->orWhere('phone', $phone)->first();
+            if (!$user) {
+                return response(['message' => 'User does not exist'], 401);
+            }
+            $validated = $request->validate([
+                // 'old_password' => 'required|sometimes',
+                'password' => 'required|confirmed',
+            ]);
+            $user->password = bcrypt($request->password);
+            $user->save();
+            return $user;
+        } catch (\Throwable $th) {
+            return response([
+                'message' => $th->getMessage(),
+            ], 500);
+        }
+    }
 }
 
 // function (Request $request) {

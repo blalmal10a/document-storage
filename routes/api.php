@@ -111,15 +111,25 @@ Route::post('check-unique', function (Request $request) {
 });
 Route::post('save-user', function (Request $request) {
     try {
-        User::create([
-            'name' => $request->name,
-            'phone' => $request->phone,
-            'password' => bcrypt($request->password)
-        ]);
+        if ($request->id) {
+            $user = User::find($request->id);
+            $user->password = bcrypt($request->password);
+            $user->save();
+            return $user;
+        } else
+            User::create([
+                'name' => $request->name,
+                'phone' => $request->phone,
+                'password' => bcrypt($request->password)
+            ]);
     } catch (\Throwable $th) {
         return Response($th->getMessage(), 422);
     }
 });
+
+// RESET PASSWORD
+Route::get('user-by-phone', [UserController::class, 'getUserByPhone']);
+Route::post('set-new-password', [UserController::class, 'getUserByPhone']);
 // Route::get('tilte-storage', [TilteStorageController::class, 'show']);
 
 // Route::post('tilpui', function (Request $request) {
