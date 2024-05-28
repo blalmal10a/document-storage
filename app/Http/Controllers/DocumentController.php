@@ -67,7 +67,7 @@ class DocumentController extends Controller
                 'name' => 'required',
                 'part' => 'required',
                 'path' => 'nullable',
-                'document_file' => 'required|file',
+                'document_file' => 'nullable|file',
                 'part_of_file' => 'required|unique:documents,part_of_file, NULL,part_of_file,user_id,' . $user_id,
             ]);
 
@@ -75,17 +75,22 @@ class DocumentController extends Controller
             $result = $request;
             $result['details'] = json_decode($request->details, true);
             $docname = str_replace(' ', '_', $request->part_of_file);
-            $filename = $user_id . '/' . $docname  . '.' . $request->document_file->getClientOriginalExtension();
+            try {
 
-            $bucket = $this->storageBucket();
-            $mime_type = $request->document_file->getMimeType();
-            $data = file_get_contents($request->document_file);
-            $stream = fopen('data:' . $mime_type . ';base64,' . base64_encode($data), 'r');
-            $bucket->upload($stream, [
-                'name' => $filename,
-            ]);
-            ///
-            $result['path'] = $filename;
+                $filename = $user_id . '/' . $docname  . '.' . $request->document_file->getClientOriginalExtension();
+
+                $bucket = $this->storageBucket();
+                $mime_type = $request->document_file->getMimeType();
+                $data = file_get_contents($request->document_file);
+                $stream = fopen('data:' . $mime_type . ';base64,' . base64_encode($data), 'r');
+                $bucket->upload($stream, [
+                    'name' => $filename,
+                ]);
+                ///
+                $result['path'] = $filename;
+            } catch (\Throwable $th) {
+                //throw $th;
+            }
             $result['user_id'] = $user_id;
             $result = document::create($result->toArray());
             return $this->index(request());
